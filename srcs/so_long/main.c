@@ -2,6 +2,7 @@
 
 int	main(int argc, char **argv)
 {
-	parsing(argc, argv);
+	(void)argc;
+	check_characters(argv);
 	return (0);
 }

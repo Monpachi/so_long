@@ -83,6 +83,7 @@ int	check_rectangle(int argc, char **argv)
 	return (0);
 }
 
+/*
 int	check_characters(int argc, char **argv)
 {
 	int		i;
@@ -116,6 +117,36 @@ int	check_characters(int argc, char **argv)
 	close (fd);
 	return (0);
 }
+*/
+
+//test structure;
+int	check_characters(char **argv)
+{
+	int		i;
+	char	*line;
+	int		fd;
+
+	fd = open(argv[1], O_RDONLY);
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		i = 0;
+		while (line[i] != '\0')
+		{
+			if (!line)
+				exit_failure("error\n");
+			if (line[i] != 'P' && line[i] != '1' && line[i] != '0'
+				&& line[i] != 'C' && line[i] != 'E')
+				exit_failure_free(line, "Your map is not parsed\n");
+			i++;
+		}
+		free (line);
+		line = get_next_line(fd);
+	}
+	free (line);
+	close (fd);
+	return (0);
+}
 
 int	parsing(int argc, char **argv)
 {
@@ -129,7 +160,7 @@ int	parsing(int argc, char **argv)
 		printf("not a rectangle\n");
 		return (1);
 	}
-	else if (check_characters(argc, argv))
+	else if (check_characters(argv))
 	{
 		printf("map parsed no good\n");
 		return (1);
@@ -141,3 +172,4 @@ int	parsing(int argc, char **argv)
 	}
 	return (0);
 }
+

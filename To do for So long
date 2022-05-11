@@ -1,0 +1,30 @@
+Check Rectangle
+
+Leak             / DONE
+Rectangle        / Done
+Cas d'erreur     / Done
+
+************************************
+
+Check map_border
+
+Leak			/Done
+Map_border		/Done
+Cas d'erreur	/Done
+
+*************************************
+
+Check_characters
+
+Leak			/Done
+Parse			/Done
+Cas d'erreur	/Done
+
+
+*************************************
+
+Check valid map name
+
+Leak			/Done
+name			/Done
+Cas d'erreur	/Done

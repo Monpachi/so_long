@@ -54,4 +54,8 @@ t_map	*ft_lstnew(int number);
 t_map	*ft_lstlast(t_map *lst);
 void	ft_lstadd_back(t_map **alst, t_map *new);
 void	ft_lstclear(t_map **stack);
+
+
+
+void	graphic(char **argv, int width_max);
 #endif

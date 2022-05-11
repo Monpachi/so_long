@@ -20,9 +20,6 @@ char	*ber_strcpy(char *dest, char *src)
 		j++;
 	}
 	dest[j++] = '\0';
-	printf("%s\n", dest);
-	printf("%d\n", ft_strlen(dest));
-	printf("----\n");
 	return (dest);
 }
 
@@ -30,17 +27,18 @@ int	map_name_check(int argc, char **argv)
 {
 	char	*str;
 
+	str = NULL;
 	if (argc == 2)
 	{
-		str = malloc(sizeof(char) * (3 + 1));
+		str = malloc(sizeof(char) * (4 + 1));
 		str = ber_strcpy(str, argv[1]);
 		if (!ft_strcmp(str, ".ber"))
-			return (1);
+			return (free (str), 1);
 		else
 			exit_failure_free(str, "Error, not a valid a map\n");
 	}
+	else
+		exit_failure("bad input, it's not gonna work without the map\n");
+	free (str);
 	return (0);
 }
-
-
-/* a verifier si je met un (void).ber comme argument, est ce que je le fais?*/

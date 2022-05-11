@@ -60,6 +60,7 @@ int	check_rectangle2(char **argv)
 	width = check_width(argv);
 	if (width <= 2 || width == map_length->number || map_length->number <= 2)
 		exit_failure_free2(line, &map_length, "not a rectangle bro\n");
+	ft_lstclear(&map_length);
 	close (fd);
 	return (0);
 }

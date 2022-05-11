@@ -44,43 +44,6 @@ int	check_map_border(char **argv)
 	return (0);
 }
 
-
-//sans les printfs < 25 ligne
-/*
-int	check_rectangle(int argc, char **argv)
-{
-	int		fd;
-	int		len;
-	int		width;
-	char	*line;
-	int		i;
-
-	(void)argc;
-	fd = open(argv[1], O_RDONLY);
-	line = get_next_line(fd);
-	if (!line)
-		exit_failure("Error, your map is empty\n");
-	printf("line = %s\n", line);
-	i = 0;
-	len = ft_strlen(line) - 2;
-	width = -1;
-	while (line != NULL && line[i] != '\0')
-	{
-		i = ft_strlen(line) - 2;
-		if (i != len)
-			exit_failure_free(line, "Error, the map size is wrong bro\n");
-		width++;
-		free (line);
-		line = get_next_line(fd);
-		printf("line = %s\n", line);
-	}
-	printf("width = %d\n", width);
-	if (width < 2 || len < 2 || width == len)
-		exit_failure_free(line, "Error, the map size is wrong bro\n");
-	return (0);
-}
-*/
-
 int	check_characters(char **argv)
 {
 	int		i;

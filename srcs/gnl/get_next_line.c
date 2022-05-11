@@ -6,7 +6,7 @@
 /*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:37:05 by vchan             #+#    #+#             */
-/*   Updated: 2022/05/09 18:48:43 by vchan            ###   ########.fr       */
+/*   Updated: 2022/05/11 13:01:22 by vchan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,7 @@ char	*get_next_line(int fd)
 {
 	static char	buff[BUFFER_SIZE + 1];
 	char		*ret_value;
-	char		*tmp;
 
-	tmp = NULL;
 	ret_value = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) == -1)
 		return (NULL);
@@ -117,14 +115,7 @@ char	*get_next_line(int fd)
 	ret_value = readline(fd, ret_value, buff);
 	if (!ret_value)
 		return (NULL);
-	tmp = get_line(ret_value);
-	ret_value = copy_line(tmp);
+	ret_value = get_line(ret_value);
+	ret_value = copy_line(ret_value);
 	return (ret_value);
 }
-
-
-/*
-	tmp = get_line(ret_value);
-	ret_value = copy_line(tmp);
-	return (get_line(ret_value));
-*/

@@ -1,55 +1,52 @@
 #include "so_long.h"
 
-int	check_first_and_last(char *line)
+int	check_border(char *line, char **argv, int width)
 {
-	int	i;
+	int		i;
+	int		width_max;
 
 	i = 0;
-	while (line[i] && line[i] != '\n')
+	width_max = check_width(argv) - 1;
+	while (line[i])
 	{
-		if (line[i] != '1')
-			exit_failure_free(line, "Error, your map is wide open, dumbass\n");
+		if (line[i] != '1' && (width == 0 || width == width_max))
+			exit_failure_free(line, MAP_OPEN);
+		else if ((line[0] != '1' || line[ft_strlen(line) - 1] != '1')
+			&& (width > '0' || width < width_max))
+			exit_failure_free(line, MAP_OPEN);
 		i++;
 	}
-	free (line);
 	return (0);
 }
 
-int	check_map_border(int argc, char **argv)
+int	check_map_border(char **argv)
 {
-	char	*tmp;
 	char	*line;
-	int		len;
 	int		fd;
+	int		width;
+	int		width_max;
 
-	(void)argc;
+	width = 0;
+	width_max = check_width(argv);
 	fd = open(argv[1], O_RDONLY);
 	line = get_next_line(fd);
 	if (!line)
-		exit_failure_free(line, "Your map is VOIIIID\n");
-	check_first_and_last(line);
-	tmp = get_next_line(fd);
-	if (!tmp)
-		exit_failure_free(tmp, "Your map is empty\n");
-	while (tmp != NULL)
+		exit_failure("Your map is VOIIIID\n");
+	while (line != NULL)
 	{
-		line = copy_line(tmp);
-		if (!line)
-			exit_failure_free(line, "Is your map's name Void?\n");
-		len = ft_strlen(line) - 1;
-		if (line[0] != '1' || line[len] != '1')
-			exit_failure_free(line, "Error, your map is wide open, dumbass\n");
-		tmp = get_next_line(fd);
-		if (tmp)
-			free (line);
+		check_border(line, argv, width);
+		free (line);
+		line = get_next_line(fd);
+		width++;
 	}
-	check_first_and_last(line);
+	free(line);
 	close (fd);
 	return (0);
 }
 
+
 //sans les printfs < 25 ligne
-// si j'envoie .ber , je segfault
+/*
 int	check_rectangle(int argc, char **argv)
 {
 	int		fd;
@@ -82,44 +79,8 @@ int	check_rectangle(int argc, char **argv)
 		exit_failure_free(line, "Error, the map size is wrong bro\n");
 	return (0);
 }
-
-/*
-int	check_characters(int argc, char **argv)
-{
-	int		i;
-	char	*line;
-	int		fd;
-	char	*tmp;
-
-	(void)argc;
-	fd = open(argv[1], O_RDONLY);
-	tmp = get_next_line(fd);
-	line = copy_line(tmp);
-	while (line != NULL)
-	{
-		printf("line = %s\n", line);
-		i = 0;
-		while (line[i] != '\0')
-		{
-			if (line[i] != 'P' && line[i] != '1' && line[i] != '0'
-				&& line[i] != 'C' && line[i] != 'E')
-				exit_failure_free(line, "Your map is not parsed\n");
-			i++;
-		}
-		free (line);
-		tmp = get_next_line(fd);
-		if (!tmp)
-			free (tmp);
-		line = copy_line(tmp);
-	}
-	free (tmp);
-	free (line);
-	close (fd);
-	return (0);
-}
 */
 
-//test structure;
 int	check_characters(char **argv)
 {
 	int		i;
@@ -134,7 +95,7 @@ int	check_characters(char **argv)
 		while (line[i] != '\0')
 		{
 			if (!line)
-				exit_failure("error\n");
+				exit_failure("error empty\n");
 			if (line[i] != 'P' && line[i] != '1' && line[i] != '0'
 				&& line[i] != 'C' && line[i] != 'E')
 				exit_failure_free(line, "Your map is not parsed\n");
@@ -155,7 +116,7 @@ int	parsing(int argc, char **argv)
 		printf("not a valid type of map\n");
 		return (1);
 	}
-	else if (check_rectangle(argc, argv))
+	else if (check_rectangle2(argv))
 	{
 		printf("not a rectangle\n");
 		return (1);
@@ -165,7 +126,7 @@ int	parsing(int argc, char **argv)
 		printf("map parsed no good\n");
 		return (1);
 	}
-	else if (check_map_border(argc, argv))
+	else if (check_map_border(argv))
 	{
 		printf("wide open\n");
 		return (1);

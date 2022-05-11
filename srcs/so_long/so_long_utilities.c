@@ -26,6 +26,16 @@ void	ft_putstr_fd(char *s, int fd)
 		write (fd, s, ft_strlen(s));
 }
 
+void	print_stack(t_map *list)
+{
+	printf("----==== PRINT STACK ====----\n");
+	while (list)
+	{
+		printf("%d\n", list->number);
+		list = list->next;
+	}
+	printf("-----------------------------\n");
+}
 
 int	tothebackslash(char *s)
 {
@@ -48,39 +58,9 @@ char	*copy_line(char *line)
 	if (!line)
 		return (NULL);
 	newline = malloc(sizeof(char) * (tothebackslash(line) + 1));
-	printf("%d\n", tothebackslash(line) + 1);
-	printf("%s\n", line);
 	if (!newline)
 		return (free (line), NULL);
-	while (j < tothebackslash(line) - 1)
-	{
-		newline[j] = line[i];
-		j++;
-		i++;
-	}
-	newline[j] = '\0';
-	free (line);
-	printf("%d\n", ft_strlen(newline));
-	printf("%s\n", newline);
-	return (newline);
-}
-
-
-/*
-char	*copy_line(char *line)
-{
-	int		i;
-	int		j;
-	char	*newline;
-
-	i = 0;
-	j = 0;
-	if (!line)
-		return (NULL);
-	newline = malloc(sizeof(char) * (ft_strlen(line) - 1));
-	if (!newline)
-		return (free (line), NULL);
-	while (j < ft_strlen(line) - 1)
+	while (j < tothebackslash(line))
 	{
 		newline[j] = line[i];
 		j++;
@@ -90,4 +70,3 @@ char	*copy_line(char *line)
 	free (line);
 	return (newline);
 }
-*/

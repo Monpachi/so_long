@@ -17,7 +17,8 @@ SRCS		=	srcs/so_long/parsing_map.c \
 				srcs/so_long/exit.c \
 				srcs/so_long/check_ber.c \
 				srcs/so_long/so_long_utilities.c \
-				srcs/so_long/test_structure.c \
+				srcs/so_long/struct.c \
+				srcs/so_long/check_rectangle.c \
 				srcs/gnl/get_next_line.c \
 				srcs/gnl/get_next_line_utils.c
 

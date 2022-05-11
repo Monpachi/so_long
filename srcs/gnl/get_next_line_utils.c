@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vchan <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:59:48 by vchan             #+#    #+#             */
-/*   Updated: 2022/04/29 16:25:11 by vchan            ###   ########.fr       */
+/*   Updated: 2022/01/24 19:00:24 by vchan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char	*ft_strjoin(char *ret_value, char *buf)
 	while (buf[j] != '\0')
 		new[i++] = buf[j++];
 	new[ft_strlen(ret_value) + ft_strlen(buf)] = '\0';
+	free(ret_value);
 	return (new);
 }
 

@@ -46,7 +46,6 @@ int	check_rectangle2(char **argv)
 	map_length = NULL;
 	fd = open(argv[1], O_RDONLY);
 	line = get_next_line(fd);
-	printf("line = %s\n", line);
 	if (!line)
 		exit_failure("Map empty\n");
 	while (line != NULL)

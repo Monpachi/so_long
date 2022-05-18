@@ -1,21 +1,57 @@
 #include "so_long.h"
+#include "../../minilibx-linux/mlx.h"
 
-void	graphic(char **argv, int width_max)
+char	**putintab(char **argv)
 {
-	int		fd;
-	char	*line;
+	int		len;
+	char	**result;
 	int		i;
-	t_map	*map;
-	int		width;
+	int		fd;
 
-	width = 0;
-	map = NULL;
 	fd = open(argv[1], O_RDONLY);
-	line = get_next_line(fd);
-	while (line != NULL)
+	i = 0;
+	len = check_width(argv);
+	printf("%d\n", len);
+	result = malloc(sizeof(char *) * (len + 1));
+	if (!result)
+		return (NULL);
+	result[i] = get_next_line(fd);
+	i++;
+	while (len > 0)
 	{
-		if (line[i] == '1')
-			ft_lstadd_back(&map->wall, ft_lstnew(line));
+		result[i] = get_next_line(fd);
+		i++;
+		len--;
 	}
-	return ;
+	close (fd);
+	return (result);
+}
+
+void	wall_middle5(t_map *map, int y, int x, char **line)
+{
+	if (line[y][x] == '1' && y > 0 && y < map->height - 1 &&
+		x > 0 && x < map->lenght - 1 && line[y - 1][x] == '1' &&
+		line[y + 1][x] == '1' && line[y][x - 1] == '1'
+		&& line[y][x + 1] != '1')
+		mlx_put_image_to_window(map->mlx, map->win, map->wall22,
+			(64 * x), (64 * y));
+	else if (line[y][x] == '1' && y > 0 && y < map->height - 1 &&
+		x > 0 && x < map->lenght - 1 && line[y - 1][x] == '1' &&
+		line[y + 1][x] == '1' && line[y][x - 1] != '1'
+		&& line[y][x + 1] == '1')
+		mlx_put_image_to_window(map->mlx, map->win, map->wall23,
+			(64 * x), (64 * y));
+}
+
+void	wall_to_win(t_map *map, int y, int x)
+{
+	char	**line;
+
+	line = map->fullmap;
+	which_wall(map, y, x, line);
+	wall_middle1(map, y, x, line);
+	wall_middle2(map, y, x, line);
+	wall_middle3(map, y, x, line);
+	wall_middle4(map, y, x, line);
+	wall_middle5(map, y, x, line);
 }

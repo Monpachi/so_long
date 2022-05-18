@@ -12,6 +12,18 @@ t_map	*ft_lstnew(int number)
 	return (node);
 }
 
+t_map	*ft_lstnewvoid(void *content)
+{
+	t_map	*str;
+
+	str = malloc(sizeof(t_map));
+	if (!str)
+		return (NULL);
+	str->content = content;
+	str->next = NULL;
+	return (str);
+}
+
 t_map	*ft_lstlast(t_map *lst)
 {
 	if (!lst)

@@ -17,6 +17,13 @@
 # define IMG_ITEM "./img/CC.xpm"
 
 /**************************/
+/*			INTRO		  */
+/**************************/
+
+# define IMG_INTRO "./img/intro/pennywise.xpm"
+# define IMG_INTRO1 "./img/intro/newgame.xpm"
+
+/**************************/
 /*			FLOOR		  */
 /**************************/
 
@@ -56,7 +63,10 @@
 
 # define WIDTH 64
 # define HEIGHT 64
-
+# define WIDTH_INTRO 1000
+# define HEIGHT_INTRO 1000
+# define WIDTH_NEWGAME 165
+# define HEIGHT_NEWGAME 54
 /******************************************************************************/
 /*									Error									  */
 /******************************************************************************/
@@ -77,9 +87,14 @@ typedef struct s_map
 	void			*next;
 	int				number;
 	void			*player;
+	int				p_init_x;
 	int				p_pos_x;
 	int				p_pos_y;
+	char			*movement;
+	char			*win_choice;
 	void			*exit;
+	void			*intro;
+	void			*intro1;
 	void			*wall0;
 	void			*wall1;
 	void			*wall2;
@@ -151,6 +166,20 @@ void	wall_middle3(t_map *map, int y, int x, char **line);
 void	wall_middle4(t_map *map, int y, int x, char **line);
 void	which_wall(t_map *map, int y, int x, char **line);
 void	waiting_to_mist(t_map *map, int y, int x);
+void	intro_window(t_map *map);
+void	init_struct(t_map *map, char **line, char **argv);
+/******************************************************************************/
+/*									GAME									  */
+/******************************************************************************/
+
+void	collectible_hunter(t_map *map, int i);
+int		player_left(t_map *map);
+int		player_right(t_map *map);
+int		player_down(t_map *map);
+int		player_up(t_map *map);
+void	space(t_map *map);
+int		escape(t_map *map);
+void	game(t_map *map);
 /******************************************************************************/
 /*									LIBFT									  */
 /******************************************************************************/
@@ -160,10 +189,10 @@ t_map	*ft_lstnewvoid(void *content);
 t_map	*ft_lstlast(t_map *lst);
 void	ft_lstadd_back(t_map **alst, t_map *new);
 void	ft_lstclear(t_map **stack);
-void		map_insert(t_map *map);
+void	map_insert(t_map *map);
 void	img_to_win(char **result, t_map *map);
 
-int	key_hook(int keycode, t_map *map);
-int	wall_block(t_map *map);
+int		key_hook(int keycode, t_map *map);
+int		wall_block(t_map *map);
 void	wall_to_win(t_map *map, int y, int x);
 #endif

@@ -22,9 +22,9 @@ void	space(t_map *map)
 	}
 }
 
-
 int	escape(t_map *map)
 {
 	mlx_destroy_window(map->mlx, map->win);
+	mlx_loop_end(map->mlx);
 	return (EXIT_SUCCESS) ;
 }

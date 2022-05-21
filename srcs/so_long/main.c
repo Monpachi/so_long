@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 	printf("line[4] %s\n", line[4]);
 	init_struct(&map, line, argv);
 	map.mlx = mlx_init();
-	map.win = mlx_new_window(map.mlx, 1000, 1000, "so_long");
+	map.win = mlx_new_window(map.mlx, map.lenght * WIDTH, map.height * HEIGHT, "so_long");
 	intro_window(&map);
 	mlx_key_hook(map.win, key_hook, &map);
 	mlx_loop(map.mlx);

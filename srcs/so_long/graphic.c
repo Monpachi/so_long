@@ -33,13 +33,13 @@ void	wall_middle5(t_map *map, int y, int x, char **line)
 		x > 0 && x < map->lenght - 1 && line[y - 1][x] == '1' &&
 		line[y + 1][x] == '1' && line[y][x - 1] == '1'
 		&& line[y][x + 1] != '1')
-		mlx_put_image_to_window(map->mlx, map->win, map->wall22,
+		mlx_put_image_to_window(map->mlx, map->win, map->wall[22],
 			(64 * x), (64 * y));
 	else if (line[y][x] == '1' && y > 0 && y < map->height - 1 &&
 		x > 0 && x < map->lenght - 1 && line[y - 1][x] == '1' &&
 		line[y + 1][x] == '1' && line[y][x - 1] != '1'
 		&& line[y][x + 1] == '1')
-		mlx_put_image_to_window(map->mlx, map->win, map->wall23,
+		mlx_put_image_to_window(map->mlx, map->win, map->wall[23],
 			(64 * x), (64 * y));
 }
 

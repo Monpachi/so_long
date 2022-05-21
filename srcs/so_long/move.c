@@ -1,6 +1,34 @@
 #include "so_long.h"
 # include "../../minilibx-linux/mlx.h"
 
+void	player_mvt(t_map *map, char **line)
+{
+	int		fakey;
+	int		fakex;
+
+	fakey = 0;
+	fakex = 0;
+	mlx_put_image_to_window(map->mlx, map->win, map->bg,
+		(64 * (map->p_pos_x)), (64 * (map->p_pos_y)));
+	if (!ft_strcmp(map->movement, "up"))
+		fakey = -1;
+	else if (!ft_strcmp(map->movement, "left"))
+		fakex = -1;
+	else if (!ft_strcmp(map->movement, "right"))
+		fakex = 1;
+	else if (!ft_strcmp(map->movement, "down"))
+		fakey = 1;
+	mlx_put_image_to_window(map->mlx, map->win, map->player,
+		(64 * (map->p_pos_x + fakex)), (64 * (map->p_pos_y + fakey)));
+	if (line[map->p_pos_y + fakey][map->p_pos_x + fakex] == 'E' &&
+		map->collectible_nbr == 0)
+		escape(map);
+	map->p_pos_y = map->p_pos_y + fakey;
+	map->p_pos_x = map->p_pos_x + fakex;
+	map->move_count++;
+	map->move_step++;
+}
+
 int	player_down(t_map *map)
 {
 	char	**line;
@@ -12,17 +40,7 @@ int	player_down(t_map *map)
 	{
 		map->movement = ft_strdup("down");
 		collectible_hunter(map, i);
-		mlx_put_image_to_window(map->mlx, map->win, map->bg,
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y)));
-		mlx_put_image_to_window(map->mlx, map->win, map->player,
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y + 1)));
-		// if (line[map->p_pos_y - 1][map->p_pos_x] == '1')
-		// 	waiting_to_mist(map, map->p_pos_y, map->p_pos_x);
-		// else
-		// 	waiting_to_mist(map, map->p_pos_y - 2, map->p_pos_x);
-		map->p_pos_y = map->p_pos_y + 1;
-		map->move_count += i;
-		map->move_step += i;
+		player_mvt(map, line);
 		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
@@ -34,19 +52,12 @@ int	player_up(t_map *map)
 	int		i;
 
 	i = 1;
-	printf("fullmap[0] = %s\n", map->fullmap[0]);
-	printf("map pos y = %d, map pos x = %d\n",map->p_pos_y, map->p_pos_x);
 	line = map->fullmap;
 	if (map->p_pos_y > 0 && line[map->p_pos_y - 1][map->p_pos_x] != '1')
 	{
 		map->movement = ft_strdup("up");
 		collectible_hunter(map, i);
-		mlx_put_image_to_window(map->mlx, map->win, map->bg,
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y)));
-		mlx_put_image_to_window(map->mlx, map->win, map->player,
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y - 1)));
-		map->p_pos_y = map->p_pos_y - 1;
-		map->move_count += i;
+		player_mvt(map, line);
 		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
@@ -63,12 +74,7 @@ int	player_left(t_map *map)
 	{
 		map->movement = ft_strdup("left");
 		collectible_hunter(map, i);
-		mlx_put_image_to_window(map->mlx, map->win, map->bg,
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y)));
-		mlx_put_image_to_window(map->mlx, map->win, map->player,
-			(64 * (map->p_pos_x - 1)), (64 * (map->p_pos_y)));
-		map->p_pos_x = map->p_pos_x - 1;
-		map->move_count += i;
+		player_mvt(map, line);
 		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
@@ -85,12 +91,7 @@ int	player_right(t_map *map)
 	{
 		map->movement = ft_strdup("right");
 		collectible_hunter(map, i);
-		mlx_put_image_to_window(map->mlx, map->win, map->bg,
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y)));
-		mlx_put_image_to_window(map->mlx, map->win, map->player,
-			(64 * (map->p_pos_x + 1)), (64 * (map->p_pos_y)));
-		map->p_pos_x = map->p_pos_x + 1;
-		map->move_count += i;
+		player_mvt(map, line);
 		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
@@ -99,9 +100,7 @@ int	player_right(t_map *map)
 int	key_hook(int keycode, t_map *map)
 {
 	if (keycode == XK_s || keycode == XK_S)
-	{
 		player_down(map);
-	}
 	else if (keycode == XK_w || keycode == XK_W)
 		player_up(map);
 	else if (keycode == XK_a || keycode == XK_A)
@@ -111,7 +110,6 @@ int	key_hook(int keycode, t_map *map)
 	else if (keycode == XK_Escape)
 		escape(map);
 	else if (keycode == XK_space)
-	{
 		space(map);
 	}
 	printf("------------------\n");

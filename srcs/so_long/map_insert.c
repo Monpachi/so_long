@@ -1,18 +1,34 @@
 #include "so_long.h"
 # include "../../minilibx-linux/mlx.h"
 
+#include<string.h>
+// void	black(t_map *map)
+// {
+// 	map->blackmamba = mlx_new_image(map->mlx, 64, 64);
+// 	//printf("%p\n", map->blackmamba);
+// 	//bzero(map->blackmamba, 64*64*sizeof(int));
+// }
+
+// void	animated_torch(t_map *map)
+// {
+
+// }
+
+
 int	check_img(t_map *map)
 {
+	int	i;
+
+	i = 0;
 	if (map->player == NULL || map->exit == NULL || map->bg == NULL
-		|| map->coll == NULL || map->wall0 == NULL || map->wall1 == NULL
-		|| map->wall2 == NULL || map->wall3 == NULL || map->wall4 == NULL
-		|| map->wall5 == NULL || map->wall6 == NULL || map->wall7 == NULL
-		|| map->wall8 == NULL || map->wall9 == NULL || map->wall10 == NULL
-		|| map->wall11 == NULL || map->wall12 == NULL || map->wall13 == NULL
-		|| map->wall14 == NULL || map->wall15 == NULL || map->wall16 == NULL
-		|| map->wall17 == NULL || map->wall18 == NULL || map->wall19 == NULL
-		|| map->wall20 == NULL || map->wall21 == NULL || map->wall22 == NULL
-		|| map->wall23 == NULL || map->wall24 == NULL)
+		|| map->coll == NULL)
+	{
+		ft_putstr_fd(MISSING_IMG, 1);
+		return (EXIT_FAILURE);
+	}
+	while (map->wall[i])
+		i++;
+	if (i != NB_WALL)
 	{
 		ft_putstr_fd(MISSING_IMG, 1);
 		return (EXIT_FAILURE);
@@ -24,25 +40,15 @@ void	wall_insert(t_map *map)
 {
 	int	width;
 	int	height;
+	int	i;
 
-	map->wall0 = mlx_xpm_file_to_image(map->mlx, IMG_WALL0, &width, &height);
-	map->wall1 = mlx_xpm_file_to_image(map->mlx, IMG_WALL1, &width, &height);
-	map->wall2 = mlx_xpm_file_to_image(map->mlx, IMG_WALL2, &width, &height);
-	map->wall3 = mlx_xpm_file_to_image(map->mlx, IMG_WALL3, &width, &height);
-	map->wall4 = mlx_xpm_file_to_image(map->mlx, IMG_WALL4, &width, &height);
-	map->wall5 = mlx_xpm_file_to_image(map->mlx, IMG_WALL5, &width, &height);
-	map->wall6 = mlx_xpm_file_to_image(map->mlx, IMG_WALL6, &width, &height);
-	map->wall7 = mlx_xpm_file_to_image(map->mlx, IMG_WALL7, &width, &height);
-	map->wall8 = mlx_xpm_file_to_image(map->mlx, IMG_WALL8, &width, &height);
-	map->wall9 = mlx_xpm_file_to_image(map->mlx, IMG_WALL9, &width, &height);
-	map->wall10 = mlx_xpm_file_to_image(map->mlx, IMG_WALL10, &width, &height);
-	map->wall11 = mlx_xpm_file_to_image(map->mlx, IMG_WALL11, &width, &height);
-	map->wall12 = mlx_xpm_file_to_image(map->mlx, IMG_WALL12, &width, &height);
-	map->wall13 = mlx_xpm_file_to_image(map->mlx, IMG_WALL13, &width, &height);
-	map->wall14 = mlx_xpm_file_to_image(map->mlx, IMG_WALL14, &width, &height);
-	map->wall15 = mlx_xpm_file_to_image(map->mlx, IMG_WALL15, &width, &height);
-	map->wall16 = mlx_xpm_file_to_image(map->mlx, IMG_WALL16, &width, &height);
-	map->wall17 = mlx_xpm_file_to_image(map->mlx, IMG_WALL17, &width, &height);
+	i = 0;
+	while (g_wall[i])
+	{
+		map->wall[i] = mlx_xpm_file_to_image(map->mlx,
+				(char *)g_wall[i], &width, &height);
+		i++;
+	}
 }
 
 void	map_insert(t_map *map)
@@ -54,14 +60,8 @@ void	map_insert(t_map *map)
 	map->coll = mlx_xpm_file_to_image(map->mlx, IMG_ITEM, &width, &height);
 	map->exit = mlx_xpm_file_to_image(map->mlx, IMG_EXIT, &width, &height);
 	map->bg = mlx_xpm_file_to_image(map->mlx, IMG_BG, &width, &height);
+	// black(map);
 	wall_insert(map);
-	map->wall18 = mlx_xpm_file_to_image(map->mlx, IMG_WALL18, &width, &height);
-	map->wall19 = mlx_xpm_file_to_image(map->mlx, IMG_WALL19, &width, &height);
-	map->wall20 = mlx_xpm_file_to_image(map->mlx, IMG_WALL20, &width, &height);
-	map->wall21 = mlx_xpm_file_to_image(map->mlx, IMG_WALL21, &width, &height);
-	map->wall22 = mlx_xpm_file_to_image(map->mlx, IMG_WALL22, &width, &height);
-	map->wall23 = mlx_xpm_file_to_image(map->mlx, IMG_WALL23, &width, &height);
-	map->wall24 = mlx_xpm_file_to_image(map->mlx, IMG_WALL24, &width, &height);
 	check_img(map);
 }
 
@@ -75,7 +75,7 @@ void	img_to_win2(char result, t_map *map, int y, int x)
 		map->p_pos_y = y;
 	}
 	if (result == '0')
-		mlx_put_image_to_window(map->mlx, map->win, map->wall24,
+		mlx_put_image_to_window(map->mlx, map->win, map->wall[VOID],
 			(64 * x), (64 * y));
 	if (result == 'E')
 		mlx_put_image_to_window(map->mlx, map->win, map->exit,

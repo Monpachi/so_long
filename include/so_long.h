@@ -22,6 +22,8 @@
 
 # define IMG_INTRO "./img/intro/pennywise.xpm"
 # define IMG_INTRO1 "./img/intro/newgame.xpm"
+# define IMG_INTRO2 "./img/intro/pennylong.xpm"
+# define IMG_INTRO3 "./img/intro/pennywisesmall.xpm"
 
 /**************************/
 /*			FLOOR		  */
@@ -30,43 +32,23 @@
 # define IMG_BG	"./img/03.xpm"
 
 /**************************/
-/*			WALL		  */
+/*		ANIMATION		  */
 /**************************/
-# define IMG_WALL0 "./img/wall_top_left.xpm"
-# define IMG_WALL1 "./img/wall_top.xpm"
-# define IMG_WALL2 "./img/wall_top_right.xpm"
-# define IMG_WALL3 "./img/wall_right.xpm"
-# define IMG_WALL4 "./img/wall_bot_right.xpm"
-# define IMG_WALL5 "./img/wall_bot.xpm"
-# define IMG_WALL6 "./img/wall_bot_left.xpm"
-# define IMG_WALL7 "./img/wall_left.xpm"
-/****************/
-/* center wall  */
-/****************/
-# define IMG_WALL8 "./img/wall_center.xpm"
-# define IMG_WALL9 "./img/wall_center_right.xpm"
-# define IMG_WALL10 "./img/wall_center_left.xpm"
-# define IMG_WALL11 "./img/wall_center_top.xpm"
-# define IMG_WALL16 "./img/wall_center_bot.xpm"
-# define IMG_WALL12 "./img/wall_center_bot_left.xpm"
-# define IMG_WALL13 "./img/wall_center_bot_right.xpm"
-# define IMG_WALL14 "./img/wall_center_between.xpm"
-# define IMG_WALL15 "./img/wall_center_between2.xpm"
-# define IMG_WALL17 "./img/wall_center_tri1.xpm"
-# define IMG_WALL18 "./img/wall_center_top_right.xpm"
-# define IMG_WALL19 "./img/wall_center_top_left.xpm"
-# define IMG_WALL20 "./img/wall_center_tri2.xpm"
-# define IMG_WALL21 "./img/wall_center_allway.xpm"
-# define IMG_WALL22 "./img/wall_center_tri3.xpm"
-# define IMG_WALL23 "./img/wall_center_tri4.xpm"
-# define IMG_WALL24 "./img/void.xpm"
 
 # define WIDTH 64
 # define HEIGHT 64
-# define WIDTH_INTRO 1000
-# define HEIGHT_INTRO 1000
+# define WIDTH_INTRO 960
+# define HEIGHT_INTRO 960
+# define WIDTH_INTRO_SX 300
+# define HEIGHT_INTRO_SY 325
+# define WIDTH_INTRO_LX 200
+# define HEIGHT_INTRO_LY 200
 # define WIDTH_NEWGAME 165
 # define HEIGHT_NEWGAME 54
+# define WIN_X 650
+# define WIN_Y 650
+
+
 /******************************************************************************/
 /*									Error									  */
 /******************************************************************************/
@@ -78,6 +60,64 @@
 # define KEY_S 1
 # define KEY_D 2
 # define KEY_W 13
+
+typedef enum e_wall
+{
+	TOP_LEFT,
+	TOP,
+	TOP_RIGHT,
+	RIGHT,
+	BOT_RIGHT,
+	BOT,
+	BOT_LEFT,
+	LEFT,
+	CENTER,
+	CENTER_RIGHT,
+	CENTER_LEFT,
+	CENTER_TOP,
+	CENTER_BOT,
+	CENTER_BOT_LEFT,
+	CENTER_BOT_RIGHT,
+	CENTER_BETWEEN,
+	CENTER_BETWEEN2,
+	CENTER_TRI1,
+	CENTER_TOP_RIGHT,
+	CENTER_TOP_LEFT,
+	CENTER_TRI2,
+	CENTER_ALLWAY,
+	CENTER_TRI3,
+	CENTER_TRI4,
+	VOID,
+	NB_WALL
+}	t_wall;
+
+const static char *g_wall[NB_WALL] = {
+	"./img/wall_top_left.xpm",
+	"./img/wall_top.xpm",
+	"./img/wall_top_right.xpm",
+	"./img/wall_right.xpm",
+	"./img/wall_bot_right.xpm",
+	"./img/wall_bot.xpm",
+	"./img/wall_bot_left.xpm",
+	"./img/wall_left.xpm",
+	"./img/wall_center.xpm",
+	"./img/wall_center_right.xpm",
+	"./img/wall_center_left.xpm",
+	"./img/wall_center_top.xpm",
+	"./img/wall_center_bot.xpm",
+	"./img/wall_center_bot_left.xpm",
+	"./img/wall_center_bot_right.xpm",
+	"./img/wall_center_between.xpm",
+	"./img/wall_center_between2.xpm",
+	"./img/wall_center_tri1.xpm",
+	"./img/wall_center_top_right.xpm",
+	"./img/wall_center_top_left.xpm",
+	"./img/wall_center_tri2.xpm",
+	"./img/wall_center_allway.xpm",
+	"./img/wall_center_tri3.xpm",
+	"./img/wall_center_tri4.xpm",
+	"./img/void.xpm"
+};
 
 typedef struct s_map
 {
@@ -95,31 +135,9 @@ typedef struct s_map
 	void			*exit;
 	void			*intro;
 	void			*intro1;
-	void			*wall0;
-	void			*wall1;
-	void			*wall2;
-	void			*wall3;
-	void			*wall4;
-	void			*wall5;
-	void			*wall6;
-	void			*wall7;
-	void			*wall8;
-	void			*wall9;
-	void			*wall10;
-	void			*wall11;
-	void			*wall12;
-	void			*wall13;
-	void			*wall14;
-	void			*wall15;
-	void			*wall16;
-	void			*wall17;
-	void			*wall18;
-	void			*wall19;
-	void			*wall20;
-	void			*wall21;
-	void			*wall22;
-	void			*wall23;
-	void			*wall24;
+	void			*intro2;
+	void			*intro3;
+	void			*wall[25];
 	void			*bg;
 	void			*bg1;
 	void			*enemy;
@@ -133,13 +151,8 @@ typedef struct s_map
 	int				move_step;
 	int				myst_y;
 	int				myst_x;
+	void			*blackmamba;
 }	t_map;
-
-// typedef struct s_mlx
-// {
-// 	void	*mlx;
-// 	void	*win;
-// }	t_mlx;
 
 int		check_map_border(char **argv);
 char	*get_next_line(int fd);

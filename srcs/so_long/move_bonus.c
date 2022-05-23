@@ -18,7 +18,6 @@ void	player_mvt(t_map *map)
 		fakex = 1;
 	else if (!ft_strcmp(map->movement, "down"))
 		fakey = 1;
-	waiting_to_mist(map);
 	no_exit(map, fakey, fakex);
 	map->p_pos_y = map->p_pos_y + fakey;
 	map->p_pos_x = map->p_pos_x + fakex;
@@ -33,6 +32,7 @@ int	player_down(t_map *map)
 		map->movement = ft_strdup("down");
 		collectible_hunter(map);
 		player_mvt(map);
+		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
 }
@@ -44,6 +44,7 @@ int	player_up(t_map *map)
 		map->movement = ft_strdup("up");
 		collectible_hunter(map);
 		player_mvt(map);
+		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
 }
@@ -55,6 +56,7 @@ int	player_left(t_map *map)
 		map->movement = ft_strdup("left");
 		collectible_hunter(map);
 		player_mvt(map);
+		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
 }
@@ -66,9 +68,15 @@ int	player_right(t_map *map)
 		map->movement = ft_strdup("right");
 		collectible_hunter(map);
 		player_mvt(map);
+		printf("map mvt = %s\n", map->movement);
 	}
 	return (0);
 }
+
+/**************************************************/
+
+/**************************************************/
+
 
 int	key_hook(int keycode, t_map *map)
 {
@@ -88,8 +96,7 @@ int	key_hook(int keycode, t_map *map)
 	if (keycode == XK_space)
 		space(map);
 	score_in_win(map);
-	//printf("move_step = %d\n", map->move_step);
-	// printf("map player pos x = %d\n", map->p_pos_x);
-	// printf("map player pos y = %d\n", map->p_pos_y);
+	printf("------------------\n");
+	printf("map item = %d\n", map->collectible_nbr);
 	return (0);
 }

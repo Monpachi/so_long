@@ -8,13 +8,17 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <X11/keysym.h>
+# include <limits.h>
 
 /******************************************************************************/
 /*								IMG LOCATION								  */
 /******************************************************************************/
 # define IMG_PLAYER "./img/P.xpm"
 # define IMG_EXIT "./img/E1.xpm"
+# define IMG_EXIT_P "./img/E.xpm"
 # define IMG_ITEM "./img/CC.xpm"
+# define IMG_BLACK "./img/black.xpm"
+# define IMG_BLACK64 "./img/black64.xpm"
 
 /**************************/
 /*			INTRO		  */
@@ -87,9 +91,40 @@ typedef enum e_wall
 	CENTER_ALLWAY,
 	CENTER_TRI3,
 	CENTER_TRI4,
-	VOID,
+	FOG,
+	SQUARE_TOP_L,
+	SQUARE_TOP_R,
+	SQUARE_BOT_R,
+	SQUARE_BOT_L,
 	NB_WALL
 }	t_wall;
+
+typedef enum e_fog
+{
+	FOG1,
+	FOG2,
+	FOG3,
+	FOG4,
+	FOG5,
+	FOG6,
+	FOG7,
+	FOG8,
+	FOG9,
+	NB_FOG
+}	t_fog;
+
+
+const static char *g_fog[NB_FOG] = {
+	"./img/fog1.xpm"
+	"./img/fog2.xpm"
+	"./img/fog3.xpm"
+	"./img/fog4.xpm"
+	"./img/fog5.xpm"
+	"./img/fog6.xpm"
+	"./img/fog7.xpm"
+	"./img/fog8.xpm"
+	"./img/fog9.xpm"
+};
 
 const static char *g_wall[NB_WALL] = {
 	"./img/wall_top_left.xpm",
@@ -116,7 +151,11 @@ const static char *g_wall[NB_WALL] = {
 	"./img/wall_center_allway.xpm",
 	"./img/wall_center_tri3.xpm",
 	"./img/wall_center_tri4.xpm",
-	"./img/void.xpm"
+	"./img/fog.xpm",
+	"./img/square_top_left.xpm",
+	"./img/square_top_right.xpm",
+	"./img/square_bot_right.xpm",
+	"./img/square_bot_left.xpm",
 };
 
 typedef struct s_map
@@ -124,26 +163,31 @@ typedef struct s_map
 	int				height;
 	int				lenght;
 	void			*content;
-	void			*next;
+	struct s_map	*next;
 	int				number;
 	void			*player;
+	int				enemies;
 	int				p_init_x;
 	int				p_pos_x;
 	int				p_pos_y;
 	char			*movement;
 	char			*win_choice;
 	void			*exit;
+	void			*exit_p;
+	int				location_exit_x;
+	int				location_exit_y;
 	void			*intro;
 	void			*intro1;
 	void			*intro2;
 	void			*intro3;
-	void			*wall[25];
+	void			*black;
+	void			*black64;
+	void			*fog[10];
+	void			*wall[31];
 	void			*bg;
-	void			*bg1;
 	void			*enemy;
 	void			*coll;
 	int				collectible_nbr;
-	int				game_score;
 	void			*mlx;
 	void			*win;
 	char			**fullmap;
@@ -151,6 +195,10 @@ typedef struct s_map
 	int				move_step;
 	int				myst_y;
 	int				myst_x;
+	int				myst_y2;
+	int				myst_x2;
+	int				myst_y3;
+	int				myst_x3;
 	void			*blackmamba;
 }	t_map;
 
@@ -178,14 +226,16 @@ void	wall_middle2(t_map *map, int y, int x, char **line);
 void	wall_middle3(t_map *map, int y, int x, char **line);
 void	wall_middle4(t_map *map, int y, int x, char **line);
 void	which_wall(t_map *map, int y, int x, char **line);
-void	waiting_to_mist(t_map *map, int y, int x);
 void	intro_window(t_map *map);
 void	init_struct(t_map *map, char **line, char **argv);
+void	no_exit(t_map *map, int fakey, int fakex);
+void	wall_middle6(t_map *map, int y, int x);
+void	wall_middle7(t_map *map, int y, int x);
 /******************************************************************************/
 /*									GAME									  */
 /******************************************************************************/
 
-void	collectible_hunter(t_map *map, int i);
+void	collectible_hunter(t_map *map);
 int		player_left(t_map *map);
 int		player_right(t_map *map);
 int		player_down(t_map *map);
@@ -193,6 +243,10 @@ int		player_up(t_map *map);
 void	space(t_map *map);
 int		escape(t_map *map);
 void	game(t_map *map);
+void 	score_in_win(t_map *map);
+void	waiting_to_mist(t_map *map);
+
+
 /******************************************************************************/
 /*									LIBFT									  */
 /******************************************************************************/
@@ -202,10 +256,16 @@ t_map	*ft_lstnewvoid(void *content);
 t_map	*ft_lstlast(t_map *lst);
 void	ft_lstadd_back(t_map **alst, t_map *new);
 void	ft_lstclear(t_map **stack);
+char	*ft_itoa(int n);
+
+
 void	map_insert(t_map *map);
 void	img_to_win(char **result, t_map *map);
-
 int		key_hook(int keycode, t_map *map);
 int		wall_block(t_map *map);
 void	wall_to_win(t_map *map, int y, int x);
+
+void	black(t_map *map);
+void	animated_fog(t_map *map);
 #endif
+

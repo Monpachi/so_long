@@ -1,25 +1,39 @@
 #include "so_long.h"
 # include "../../minilibx-linux/mlx.h"
 
-void	waiting_to_mist(t_map *map, int y, int x)
+void	no_fog_exit(t_map *map)
 {
-	char	**line;
+	mlx_put_image_to_window(map->mlx, map->win, map->exit,
+		64 * map->location_exit_x, 64 * map->location_exit_y);
+}
 
-	line = map->fullmap;
-	if (map->move_step == 0)
+void	waiting_to_mist(t_map *map)
+{
+	if (map->move_count == 0)
 	{
-		map->myst_y = y;
-		map->myst_x = x;
+		map->myst_y = map->p_pos_y;
+		map->myst_x = map->p_pos_x;
+		if (map->myst_x2 != 0 || map->myst_y2 != 0)
+			mlx_put_image_to_window(map->mlx, map->win, map->wall[FOG],
+				(64 * (map->myst_x2)), (64 * (map->myst_y2)));
 	}
-	if (map->move_step == 2)
+	else if (map->move_count == 1)
 	{
-		printf("\nRESETH\n");
-		map->move_step = 0;
-		mlx_put_image_to_window(map->mlx, map->win, map->wall[VOID],
-			(64 * (map->p_pos_x)), (64 * (map->p_pos_y)));
-		map->myst_y = y;
-		map->myst_x = x;
+		map->myst_y2 = map->p_pos_y;
+		map->myst_x2 = map->p_pos_x;
+		if (map->myst_x3 != 0 || map->myst_y3 != 0)
+			mlx_put_image_to_window(map->mlx, map->win, map->wall[FOG],
+				(64 * (map->myst_x3)), (64 * (map->myst_y3)));
 	}
+	else if (map->move_count == 2)
+	{
+		map->move_count = -1;
+		mlx_put_image_to_window(map->mlx, map->win, map->wall[FOG],
+			(64 * (map->myst_x)), (64 * (map->myst_y)));
+		map->myst_x3 = map->p_pos_x;
+		map->myst_y3 = map->p_pos_y;
+	}
+	no_fog_exit(map);
 }
 
 void	erase_collectible(t_map *map, char	**line, int y, int x)
@@ -31,32 +45,24 @@ void	erase_collectible(t_map *map, char	**line, int y, int x)
 	line[y][x] = '0';
 }
 
-void	collectible_hunter(t_map *map, int i)
+void	collectible_hunter(t_map *map)
 {
-	char	**line;
+	int		fakey;
+	int		fakex;
 
-	i = 1;
-	line = map->fullmap;
-	if (!ft_strcmp(map->movement, "left"))
-	{
-		if (line[map->p_pos_y][map->p_pos_x - 1] == 'C')
-			erase_collectible(map, line, map->p_pos_y, map->p_pos_x - 1);
-	}
+	fakey = 0;
+	fakex = 0;
+	if (!ft_strcmp(map->movement, "up"))
+		fakey = -1;
+	else if (!ft_strcmp(map->movement, "left"))
+		fakex = -1;
 	else if (!ft_strcmp(map->movement, "right"))
-	{
-		if (line[map->p_pos_y][map->p_pos_x + 1] == 'C')
-			erase_collectible(map, line, map->p_pos_y, map->p_pos_x + 1);
-	}
-	else if (!ft_strcmp(map->movement, "up"))
-	{
-		if (line[map->p_pos_y - 1][map->p_pos_x] == 'C')
-			erase_collectible(map, line, map->p_pos_y - 1, map->p_pos_x);
-	}
+		fakex = 1;
 	else if (!ft_strcmp(map->movement, "down"))
-	{
-		if (line[map->p_pos_y + 1][map->p_pos_x] == 'C')
-			erase_collectible(map, line, map->p_pos_y + 1, map->p_pos_x);
-	}
+		fakey = 1;
+	if (map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] == 'C')
+		erase_collectible(map, map->fullmap, map->p_pos_y + fakey,
+			map->p_pos_x + fakex);
 }
 
 

@@ -20,6 +20,7 @@ SRCS		=	srcs/so_long/parsing_map.c \
 				srcs/so_long/struct.c \
 				srcs/so_long/check_rectangle.c \
 				srcs/so_long/wall.c \
+				srcs/so_long/wall2.c \
 				srcs/so_long/gameplay.c \
 				srcs/so_long/graphic.c \
 				srcs/so_long/move.c \

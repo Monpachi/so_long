@@ -58,6 +58,7 @@ void	map_insert(t_map *map)
 	map->bg = mlx_xpm_file_to_image(map->mlx, IMG_BG, &width, &height);
 	map->black = mlx_xpm_file_to_image(map->mlx, IMG_BLACK, &width, &height);
 	map->black64 = mlx_xpm_file_to_image(map->mlx, IMG_BLACK64, &width, &height);
+	map->enemy = mlx_xpm_file_to_image(map->mlx, IMG_ENEMY, &width, &height);
 	wall_insert(map);
 	check_img(map);
 }
@@ -84,6 +85,9 @@ void	img_to_win2(char result, t_map *map, int y, int x)
 	if (result == 'C')
 		mlx_put_image_to_window(map->mlx, map->win, map->coll,
 			(64 * x), (64 * y));
+	if (result == 'B')
+		mlx_put_image_to_window(map->mlx, map->win, map->enemy,
+			(64 * x), (64 * y));
 }
 
 void	img_to_win(char **result, t_map *map)
@@ -107,4 +111,3 @@ void	img_to_win(char **result, t_map *map)
 	}
 	return ;
 }
-

@@ -26,6 +26,7 @@ SRCS		=	srcs/so_long/parsing_map.c \
 				srcs/so_long/move.c \
 				srcs/so_long/destroy.c \
 				srcs/so_long/map_insert.c \
+				srcs/so_long/animation_bonus.c \
 				srcs/so_long/intro.c \
 				srcs/gnl/get_next_line.c \
 				srcs/gnl/get_next_line_utils.c

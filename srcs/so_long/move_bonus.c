@@ -2,7 +2,6 @@
 # include "../../minilibx-linux/mlx.h"
 #include <limits.h>
 
-
 void	player_mvt(t_map *map)
 {
 	int		fakey;
@@ -76,7 +75,6 @@ int	player_right(t_map *map)
 /**************************************************/
 
 /**************************************************/
-
 
 int	key_hook(int keycode, t_map *map)
 {

@@ -2,7 +2,6 @@
 # include "../../minilibx-linux/mlx.h"
 #include <limits.h>
 
-
 void	player_mvt(t_map *map)
 {
 	int		fakey;
@@ -20,13 +19,11 @@ void	player_mvt(t_map *map)
 		fakey = 1;
 	waiting_to_mist(map);
 	no_exit(map, fakey, fakex);
-	map->p_pos_y = map->p_pos_y + fakey;
-	map->p_pos_x = map->p_pos_x + fakex;
-	map->move_count++;
-	map->move_step++;
+	collision(map, fakey, fakex);
+	update_struct(map, fakey, fakex);
 }
 
-int	player_down(t_map *map)
+void	player_down(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y + 1][map->p_pos_x] != '1')
 	{
@@ -34,21 +31,20 @@ int	player_down(t_map *map)
 		collectible_hunter(map);
 		player_mvt(map);
 	}
-	return (0);
 }
 
-int	player_up(t_map *map)
+void	player_up(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y - 1][map->p_pos_x] != '1')
 	{
 		map->movement = ft_strdup("up");
 		collectible_hunter(map);
 		player_mvt(map);
+		// enemy_move_up(map);
 	}
-	return (0);
 }
 
-int	player_left(t_map *map)
+void	player_left(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y][map->p_pos_x - 1] != '1')
 	{
@@ -56,10 +52,9 @@ int	player_left(t_map *map)
 		collectible_hunter(map);
 		player_mvt(map);
 	}
-	return (0);
 }
 
-int	player_right(t_map *map)
+void	player_right(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y][map->p_pos_x + 1] != '1')
 	{
@@ -67,12 +62,11 @@ int	player_right(t_map *map)
 		collectible_hunter(map);
 		player_mvt(map);
 	}
-	return (0);
 }
 
 int	key_hook(int keycode, t_map *map)
 {
-	if (map->p_pos_x != 0 && map->p_pos_y != 0)
+	if (map->stop == 0 && map->p_pos_x != 0 && map->p_pos_y != 0)
 	{
 		if (keycode == XK_s || keycode == XK_S)
 			player_down(map);
@@ -82,14 +76,13 @@ int	key_hook(int keycode, t_map *map)
 			player_left(map);
 		else if (keycode == XK_d || keycode == XK_D)
 			player_right(map);
+		if (!ft_strcmp(map->movement, "game_over"))
+			map->stop = 1;
 	}
 	if (keycode == XK_Escape)
 		escape(map);
 	if (keycode == XK_space)
 		space(map);
 	score_in_win(map);
-	//printf("move_step = %d\n", map->move_step);
-	// printf("map player pos x = %d\n", map->p_pos_x);
-	// printf("map player pos y = %d\n", map->p_pos_y);
 	return (0);
 }

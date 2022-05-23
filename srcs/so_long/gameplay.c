@@ -43,6 +43,8 @@ void	erase_collectible(t_map *map, char	**line, int y, int x)
 	i = 1;
 	map->collectible_nbr -= i;
 	line[y][x] = '0';
+	if (map->collectible_nbr == 0)
+		destroy_img(map, map->coll);
 }
 
 void	collectible_hunter(t_map *map)
@@ -65,4 +67,78 @@ void	collectible_hunter(t_map *map)
 			map->p_pos_x + fakex);
 }
 
+int	collision(t_map *map, int fakey, int fakex)
+{
+	int	game_over_x;
+	int	game_over_y;
 
+	map->game_over = mlx_xpm_file_to_image(map->mlx, IMG_GAME_OVER,
+			&game_over_x, &game_over_y);
+	if (map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] == 'B')
+	{
+		mlx_clear_window(map->mlx, map->win);
+		if ((map->lenght * 64) > WIN_X && (map->height * 64) > WIN_Y)
+		{
+			mlx_put_image_to_window(map->mlx, map->win, map->game_over,
+				(map->lenght * 32) - GAME_OVER_X / 2,
+				(map->height * 32) - GAME_OVER_Y / 2);
+		}
+		else if ((map->lenght * 64) < WIN_X || (map->height * 64) > WIN_Y)
+		{
+			mlx_put_image_to_window(map->mlx, map->win, map->game_over,
+				(map->lenght * 32) - GAME_OVER_X / 2,
+				(map->height * 32) - GAME_OVER_Y / 2);
+		}
+		else if ((map->lenght * 64) > WIN_X && (map->height * 64) < WIN_Y)
+		{
+			mlx_put_image_to_window(map->mlx, map->win, map->game_over,
+				(map->lenght * 32) - GAME_OVER_X / 2,
+				(map->height * 32) - GAME_OVER_Y / 2);
+		}
+		map->movement = ft_strdup("game_over");
+	}
+	return (0);
+}
+
+// void	enemy_move_up(t_map *map)
+// {
+// 	if (!ft_strcmp(map->movement, "up"))
+// 	{
+// 		if (map->enemy_pos_y > 0 && map->enemy_pos_y < map->height - 1
+// 			&& map->fullmap[map->enemy_pos_y - 1][map->enemy_pos_x] != '1')
+// 		{
+// 			while (map->fullmap[map->enemy_pos_y - 1][map->enemy_pos_x] != 1)
+// 			{
+// 				printf("ici\n");
+// 				map->fullmap[map->enemy_pos_y][map->enemy_pos_x] = '0';
+// 				mlx_put_image_to_window(map->mlx, map->win, IMG_ENEMY,
+// 					map->enemy_pos_x * 64, map->enemy_pos_y * 64);
+// 				map->fullmap[map->enemy_pos_y - 1][map->enemy_pos_x] = 'B';
+// 				mlx_put_image_to_window(map->mlx, map->win, IMG_ENEMY,
+// 					map->enemy_pos_x * 64, (map->enemy_pos_y  - 1 ) * 64);
+// 			}
+// 			map->enemy_pos_y = map->enemy_pos_y - 1;
+// 			map->enemy_pos_x = map->enemy_pos_x;
+// 		}
+// 		else if (map->enemy_pos_y > 0 && map->enemy_pos_y < map->height - 1
+// 			&& map->fullmap[map->enemy_pos_y - 1][map->enemy_pos_x] == '1')
+// 		{
+// 			printf("y %d & x %d\n", map->enemy_pos_y, map->enemy_pos_x);
+// 			while (map->enemy_pos_y > 0 && map->enemy_pos_y < map->height - 1
+// 				&& map->fullmap[map->enemy_pos_y][map->enemy_pos_x] != 1)
+// 			{
+// 				printf("banane\n");
+// 				map->fullmap[map->enemy_pos_y][map->enemy_pos_x] = '0';
+// 				printf("ORANGE\n");
+// 				mlx_put_image_to_window(map->mlx, map->win, map->fog[1],
+// 					map->enemy_pos_x * 64, map->enemy_pos_y * 64);
+// 				printf("citron\n");
+// 				map->fullmap[map->enemy_pos_y + 1][map->enemy_pos_x] = 'B';
+// 				mlx_put_image_to_window(map->mlx, map->win, IMG_ENEMY,
+// 					map->enemy_pos_x * 64, (map->enemy_pos_y + 1) * 64);
+// 			}
+// 			map->enemy_pos_y = map->enemy_pos_y + 1;
+// 			map->enemy_pos_x = map->enemy_pos_x;
+// 		}
+// 	}
+// }

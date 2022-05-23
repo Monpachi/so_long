@@ -48,12 +48,12 @@ void	intro_window(t_map *map)
 
 	map->intro = mlx_xpm_file_to_image(map->mlx, IMG_INTRO,
 			&width_intro, &height_intro);
-	map->intro1 = mlx_xpm_file_to_image(map->mlx, IMG_INTRO1,
-			&width_newgame, &height_newgame);
 	map->intro2 = mlx_xpm_file_to_image(map->mlx, IMG_INTRO2,
 			&width_intro, &height_intro);
 	map->intro3 = mlx_xpm_file_to_image(map->mlx, IMG_INTRO3,
 			&width_intro, &height_intro);
+	map->intro1 = mlx_xpm_file_to_image(map->mlx, IMG_INTRO1,
+			&width_newgame, &height_newgame);
 	map_insert(map);
 	which_penny(map);
 	which_newgame(map);

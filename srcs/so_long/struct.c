@@ -12,14 +12,15 @@ t_map	*ft_lstnew(int number)
 	return (node);
 }
 
-t_map	*ft_lstnewvoid(void *content)
+t_fog	*ft_lstnewvoid(void *fog)
 {
-	t_map	*str;
+	t_fog	*str;
 
-	str = malloc(sizeof(t_map));
+	str = malloc(sizeof(t_fog));
 	if (!str)
 		return (NULL);
-	str->content = content;
+	str->img_fog = fog;
+		printf("fog=%p\n", fog);
 	str->next = NULL;
 	return (str);
 }
@@ -64,4 +65,31 @@ void	ft_lstclear(t_map **stack)
 		}
 	}
 	return ;
+}
+/**********************************************************/
+
+void	ft_lstfog_back(t_fog **alst, t_fog *new)
+{
+	t_fog	*tmp;
+
+	if (!*alst)
+		*alst = new ;
+	else
+	{
+		tmp = ft_lstlastfog(*alst);
+		tmp->next = new;
+	}
+	return ;
+}
+
+t_fog	*ft_lstlastfog(t_fog *lst)
+{
+	if (!lst)
+		return (NULL);
+	if (lst)
+	{
+		while (lst->next)
+			lst = lst->next;
+	}
+	return (lst);
 }

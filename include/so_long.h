@@ -14,6 +14,7 @@
 /*								IMG LOCATION								  */
 /******************************************************************************/
 # define IMG_PLAYER "./img/P.xpm"
+# define IMG_PLAYER1 "./img/P1.xpm"
 # define IMG_EXIT "./img/E1.xpm"
 # define IMG_EXIT_P "./img/E.xpm"
 # define IMG_ITEM "./img/CC.xpm"
@@ -115,6 +116,18 @@ typedef enum e_fog
 	NB_FOG
 }	t_fog_nbr;
 
+typedef enum e_player
+{
+	P,
+	P1,
+	NB_PLAYER
+}	t_player_nbr;
+
+static const char *g_player[NB_PLAYER] = {
+	"./img/P.xpm"
+	"./img/P1.xpm"
+};
+
 static const char *g_fog[NB_FOG] = {
 	"./img/fog.xpm",
 	"./img/fog1.xpm",
@@ -163,6 +176,7 @@ typedef struct s_fog
 {
 	struct s_fog	*next;
 	void			*img_fog;
+	void			*img_player;
 } t_fog;
 
 typedef struct s_map
@@ -171,12 +185,15 @@ typedef struct s_map
 	int				lenght;
 	void			*content;
 	struct s_map	*next;
+	t_fog			*ptr_player;
 	t_fog			*ptr_fog;
 	int				number;
 	void			*player;
+	void			*player1;
 	int				p_init_x;
 	int				p_pos_x;
 	int				p_pos_y;
+	int				e_move_count;
 	char			*movement;
 	char			*win_choice;
 	void			*exit;
@@ -211,6 +228,8 @@ typedef struct s_map
 	int				myst_y3;
 	int				myst_x3;
 	void			*game_over;
+	int				time;
+	int				fog_changer;
 }	t_map;
 
 int		check_map_border(char **argv);
@@ -259,7 +278,7 @@ void	game(t_map *map);
 void 	score_in_win(t_map *map);
 void	waiting_to_mist(t_map *map);
 int	collision(t_map *map, int fakey, int fakex);
-void	enemy_move_up(t_map *map);
+void	enemy_mvt(t_map *map);
 void	img_to_win2(char result, t_map *map, int y, int x);
 /******************************************************************************/
 /*									LIBFT									  */
@@ -281,8 +300,14 @@ int		wall_block(t_map *map);
 void	wall_to_win(t_map *map, int y, int x);
 
 void	black(t_map *map);
-void	animated_fog(t_map *map);
-int 	animation(void *arg);
+void	animated_fog(void *arg);
+int 	animation(t_map *map);
 void	struct_animated_fog(t_map *map);
+void	rewrite_p(t_map *map, int fakey, int fakex);
+void	img_to_win3(char result, t_map *map, int y, int x);
+void	struct_animated_p(t_map *map);
+int	looking_for_animation(t_map *map);
+void	fog_insert(t_map *map);
+
 #endif
 

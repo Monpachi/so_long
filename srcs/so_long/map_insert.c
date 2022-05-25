@@ -57,10 +57,12 @@ void	map_insert(t_map *map)
 	map->exit_p = mlx_xpm_file_to_image(map->mlx, IMG_EXIT_P, &width, &height);
 	map->bg = mlx_xpm_file_to_image(map->mlx, IMG_BG, &width, &height);
 	map->black = mlx_xpm_file_to_image(map->mlx, IMG_BLACK, &width, &height);
-	map->black64 = mlx_xpm_file_to_image(map->mlx, IMG_BLACK64, &width, &height);
+	map->black64 = mlx_xpm_file_to_image(map->mlx,
+			IMG_BLACK64, &width, &height);
 	map->enemy = mlx_xpm_file_to_image(map->mlx, IMG_ENEMY, &width, &height);
 	wall_insert(map);
 	check_img(map);
+	fog_insert(map);
 }
 
 void	img_to_win2(char result, t_map *map, int y, int x)

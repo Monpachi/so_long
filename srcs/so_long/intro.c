@@ -57,10 +57,12 @@ void	intro_window(t_map *map)
 	map_insert(map);
 	which_penny(map);
 	which_newgame(map);
+	map->movement = ft_strdup("intro");
 }
 
 void	game(t_map *map)
 {
+	map->movement = ft_strdup("in game");
 	map->lenght = ft_strlen(map->fullmap[0]);
 	img_to_win(map->fullmap, map);
 }

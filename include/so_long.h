@@ -22,6 +22,8 @@
 # define IMG_BLACK64 "./img/black64.xpm"
 # define IMG_ENEMY "./img/enemy.xpm"
 # define IMG_GAME_OVER "./img/game_over/game_over.xpm"
+# define IMG_FOG "./img/fog.xpm"
+# define IMG_FOG1 "./img/fog1.xpm"
 
 /**************************/
 /*			INTRO		  */
@@ -68,6 +70,19 @@
 # define KEY_D 2
 # define KEY_W 13
 
+typedef enum e_choice
+{
+	UP_PLAYER,
+	LEFT_PLAYER,
+	RIGHT_PLAYER,
+	DOWN_PLAYER,
+	SPACE,
+	ECHAP,
+	GAME_OVER,
+	INTRO,
+	IN_GAME
+} t_choice;
+
 typedef enum e_wall
 {
 	TOP_LEFT,
@@ -94,27 +109,12 @@ typedef enum e_wall
 	CENTER_ALLWAY,
 	CENTER_TRI3,
 	CENTER_TRI4,
-	FOG,
 	SQUARE_TOP_L,
 	SQUARE_TOP_R,
 	SQUARE_BOT_R,
 	SQUARE_BOT_L,
 	NB_WALL
 }	t_wall;
-
-typedef enum e_fog
-{
-	FOG0,
-	FOG1,
-	FOG2,
-	FOG3,
-	FOG4,
-	FOG5,
-	FOG6,
-	FOG7,
-	FOG8,
-	NB_FOG
-}	t_fog_nbr;
 
 typedef enum e_player
 {
@@ -126,18 +126,6 @@ typedef enum e_player
 static const char *g_player[NB_PLAYER] = {
 	"./img/P.xpm"
 	"./img/P1.xpm"
-};
-
-static const char *g_fog[NB_FOG] = {
-	"./img/fog.xpm",
-	"./img/fog1.xpm",
-	"./img/fog2.xpm",
-	"./img/fog3.xpm",
-	"./img/fog4.xpm",
-	"./img/fog5.xpm",
-	"./img/fog6.xpm",
-	"./img/fog7.xpm",
-	"./img/fog8.xpm",
 };
 
 static const char *g_wall[NB_WALL] = {
@@ -165,52 +153,37 @@ static const char *g_wall[NB_WALL] = {
 	"./img/wall_center_allway.xpm",
 	"./img/wall_center_tri3.xpm",
 	"./img/wall_center_tri4.xpm",
-	"./img/fog.xpm",
 	"./img/square_top_left.xpm",
 	"./img/square_top_right.xpm",
 	"./img/square_bot_right.xpm",
 	"./img/square_bot_left.xpm",
 };
 
-typedef struct s_fog
-{
-	struct s_fog	*next;
-	void			*img_fog;
-	void			*img_player;
-} t_fog;
-
 typedef struct s_map
 {
 	int				height;
 	int				lenght;
-	void			*content;
 	struct s_map	*next;
-	t_fog			*ptr_player;
-	t_fog			*ptr_fog;
 	int				number;
 	void			*player;
 	void			*player1;
-	int				p_init_x;
 	int				p_pos_x;
 	int				p_pos_y;
 	int				e_move_count;
-	char			*movement;
-	char			*win_choice;
+	int				movement;
+	int				win_choice;
 	void			*exit;
+	void			*fog;
+	void			*fog1;
 	void			*exit_p;
 	int				location_exit_x;
 	int				location_exit_y;
 	void			*intro;
 	void			*intro1;
-	void			*intro2;
-	void			*intro3;
 	void			*black;
-	void			*black64;
-	void			*fog[10];
 	void			*wall[31];
 	void			*bg;
 	void			*enemy;
-	int				enemies;
 	int				enemy_pos_x;
 	int				enemy_pos_y;
 	void			*coll;
@@ -256,20 +229,21 @@ void	wall_middle2(t_map *map, int y, int x, char **line);
 void	wall_middle3(t_map *map, int y, int x, char **line);
 void	wall_middle4(t_map *map, int y, int x, char **line);
 void	which_wall(t_map *map, int y, int x, char **line);
-void	intro_window(t_map *map);
-void	init_struct(t_map *map, char **line, char **argv);
+void	intro_window(t_map *map, char **argv);
+void	init_struct(t_map *map);
 void	no_exit(t_map *map, int fakey, int fakex);
 void	wall_middle6(t_map *map, int y, int x);
 void	wall_middle7(t_map *map, int y, int x);
 void	destroy_img(t_map *map, void *content);
 void	update_struct(t_map *map, int fakey, int fakex);
+void	init_struct_intro(t_map *map, char **argv);
+void	free_useless(t_map *map);
 /******************************************************************************/
 /*									GAME									  */
 /******************************************************************************/
 
 void	collectible_hunter(t_map *map);
 void	player_left(t_map *map);
-void	player_right(t_map *map);
 void	player_down(t_map *map);
 void	player_up(t_map *map);
 void	space(t_map *map);
@@ -285,13 +259,13 @@ void	img_to_win2(char result, t_map *map, int y, int x);
 /******************************************************************************/
 int		init_img(int width, int height, char **line, int width_max);
 t_map	*ft_lstnew(int number);
-t_fog	*ft_lstnewvoid(void *content);
+// t_fog	*ft_lstnewvoid(void *content);
 t_map	*ft_lstlast(t_map *lst);
 void	ft_lstadd_back(t_map **alst, t_map *new);
 void	ft_lstclear(t_map **stack);
 char	*ft_itoa(int n);
-void	ft_lstfog_back(t_fog **alst, t_fog *new);
-t_fog	*ft_lstlastfog(t_fog *lst);
+// void	ft_lstfog_back(t_fog **alst, t_fog *new);
+// t_fog	*ft_lstlastfog(t_fog *lst);
 
 void	map_insert(t_map *map);
 void	img_to_win(char **result, t_map *map);
@@ -308,6 +282,8 @@ void	img_to_win3(char result, t_map *map, int y, int x);
 void	struct_animated_p(t_map *map);
 int	looking_for_animation(t_map *map);
 void	fog_insert(t_map *map);
+void	no_fog_exit(t_map *map);
+void	*create_xpm_file_intro(t_map *map, void *ptr, char *img);
 
 #endif
 

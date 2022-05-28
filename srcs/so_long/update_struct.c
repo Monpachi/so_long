@@ -1,7 +1,6 @@
 #include "so_long.h"
 # include "../../minilibx-linux/mlx.h"
 
-
 int	count_nbr(t_map *map, char c)
 {
 	int	x;
@@ -48,18 +47,39 @@ void	find_enemy_pos(t_map *map, char c)
 	}
 }
 
-void	init_struct(t_map *map, char **line, char **argv)
+void	*create_xpm_file_intro(t_map *map, void *ptr, char *img)
 {
-	map->fullmap = line;
-	map->lenght = ft_strlen(line[0]);
-	map->win_choice = NULL;
-	map->movement = ft_strdup("banane");
+	int	width_intro;
+	int	height_intro;
+
+	ptr = mlx_xpm_file_to_image(map->mlx, img, &width_intro, &height_intro);
+	return (ptr);
+}
+
+void	init_struct_intro(t_map *map, char **argv)
+{
+	int	width_newgame;
+	int	height_newgame;
+
+	map->fullmap = putintab(argv);
+	map->lenght = ft_strlen(map->fullmap[0]);
+	map->movement = 9999;
+	map->height = check_width(argv);
+	map->win_choice = 0;
+	map->intro1 = mlx_xpm_file_to_image(map->mlx, IMG_INTRO1,
+			&width_newgame, &height_newgame);
+	map->win = mlx_new_window(map->mlx, map->lenght * WIDTH,
+			map->height * HEIGHT, "so_long");
+}
+
+void	init_struct(t_map *map)
+{
+	map->win_choice = 0;
+	map->movement = 9999;
 	map->move_step = 0;
 	map->move_count = 0;
-	map->height = check_width(argv);
 	map->stop = 0;
 	map->e_move_count = 0;
-	map->enemies = count_nbr(map, 'B');
 	map->collectible_nbr = count_nbr(map, 'C');
 	map->time = 0;
 	map->fog_changer = 0;

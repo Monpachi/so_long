@@ -53,8 +53,6 @@ void	wall_to_win(t_map *map, int y, int x)
 	wall_middle3(map, y, x, line);
 	wall_middle4(map, y, x, line);
 	wall_middle5(map, y, x, line);
-	// wall_middle6(map, y, x);
-	// wall_middle7(map, y, x);
 }
 
 void	no_exit(t_map *map, int fakey, int fakex)
@@ -78,19 +76,19 @@ void	no_exit(t_map *map, int fakey, int fakex)
 
 void	score_in_win(t_map *map)
 {
+	char	*tmp;
+
 	if (map->p_pos_x != 0 && map->p_pos_y != 0)
 	{
+		tmp = ft_itoa(map->move_step);
 		mlx_put_image_to_window(map->mlx, map->win, map->black, 0, 90);
 		mlx_string_put(map->mlx, map->win, 10, 80, 0xccccff, "step :");
-		mlx_string_put(map->mlx, map->win, 10, 100, 0xccccff,
-			ft_itoa(map->move_step));
+		mlx_string_put(map->mlx, map->win, 10, 100, 0xccccff, tmp);
+		free(tmp);
+		tmp = ft_itoa(map->collectible_nbr);
 		mlx_put_image_to_window(map->mlx, map->win, map->black, 0, 120);
 		mlx_string_put(map->mlx, map->win, 10, 130, 0xccccff, "kid(s):");
-		mlx_string_put(map->mlx, map->win, 10, 150, 0xccccff,
-			ft_itoa(map->collectible_nbr));
-		mlx_put_image_to_window(map->mlx, map->win, map->black, 0, 160);
-		mlx_string_put(map->mlx, map->win, 10, 170, 0xccccff, "enemies :");
-		mlx_string_put(map->mlx, map->win, 10, 190, 0xccccff,
-			ft_itoa(map->enemies));
+		mlx_string_put(map->mlx, map->win, 10, 150, 0xccccff, tmp);
+		free(tmp);
 	}
 }

@@ -9,16 +9,17 @@ void	player_mvt(t_map *map)
 
 	fakey = 0;
 	fakex = 0;
-	if (!ft_strcmp(map->movement, "up"))
+	if (map->movement == UP_PLAYER)
 		fakey = -1;
-	else if (!ft_strcmp(map->movement, "left"))
+	else if (map->movement == LEFT_PLAYER)
 		fakex = -1;
-	else if (!ft_strcmp(map->movement, "right"))
+	else if (map->movement == RIGHT_PLAYER)
 		fakex = 1;
-	else if (!ft_strcmp(map->movement, "down"))
+	else if (map->movement == DOWN_PLAYER)
 		fakey = 1;
 	waiting_to_mist(map);
 	no_exit(map, fakey, fakex);
+	rewrite_p(map, fakey, fakex);
 	collision(map, fakey, fakex);
 	enemy_mvt(map);
 	update_struct(map, fakey, fakex);
@@ -28,7 +29,7 @@ void	player_down(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y + 1][map->p_pos_x] != '1')
 	{
-		map->movement = ft_strdup("down");
+		map->movement = DOWN_PLAYER;
 		collectible_hunter(map);
 		player_mvt(map);
 	}
@@ -38,7 +39,7 @@ void	player_up(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y - 1][map->p_pos_x] != '1')
 	{
-		map->movement = ft_strdup("up");
+		map->movement = UP_PLAYER;
 		collectible_hunter(map);
 		player_mvt(map);
 	}
@@ -48,7 +49,7 @@ void	player_left(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y][map->p_pos_x - 1] != '1')
 	{
-		map->movement = ft_strdup("left");
+		map->movement = LEFT_PLAYER;
 		collectible_hunter(map);
 		player_mvt(map);
 	}
@@ -58,7 +59,7 @@ void	player_right(t_map *map)
 {
 	if (map->fullmap[map->p_pos_y][map->p_pos_x + 1] != '1')
 	{
-		map->movement = ft_strdup("right");
+		map->movement = RIGHT_PLAYER;
 		collectible_hunter(map);
 		player_mvt(map);
 	}
@@ -67,7 +68,7 @@ void	player_right(t_map *map)
 int	key_hook(int keycode, t_map *map)
 {
 	if (map->stop == 0 && map->p_pos_x != 0 && map->p_pos_y != 0
-		&& ft_strcmp(map->movement, "game_over"))
+		&& map->movement != GAME_OVER)
 	{
 		if (keycode == XK_s || keycode == XK_S)
 			player_down(map);
@@ -77,20 +78,13 @@ int	key_hook(int keycode, t_map *map)
 			player_left(map);
 		else if (keycode == XK_d || keycode == XK_D)
 			player_right(map);
-		if (!ft_strcmp(map->movement, "game_over"))
+		if (map->movement == GAME_OVER)
 			map->stop = 1;
 	}
 	if (keycode == XK_Escape)
 		escape(map);
-	if (keycode == XK_space)
+	if (keycode == XK_space && (map->movement != GAME_OVER && map->movement != IN_GAME))
 		space(map);
-	printf("MOVEMENT\n");
-	printf("enemy pos y = %d\n", map->enemy_pos_y);
-	printf("enemy pos x = %d\n", map->enemy_pos_x);
-	printf("-----------------------------\n");
-	printf("p pos y = %d\n", map->p_pos_y);
-	printf("p pos x = %d\n", map->p_pos_x);
-	printf("-----------------------------\n");
 	score_in_win(map);
 	return (0);
 }

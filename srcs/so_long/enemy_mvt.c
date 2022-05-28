@@ -8,21 +8,21 @@ void	enemy_mvt(t_map *map)
 
 	fakey = 0;
 	fakex = 0;
-	if (!ft_strcmp(map->movement, "up"))
+	if (map->movement == UP_PLAYER)
 		fakey = +1;
-	else if (!ft_strcmp(map->movement, "left"))
+	else if (map->movement == LEFT_PLAYER)
 		fakex = +1;
-	else if (!ft_strcmp(map->movement, "right"))
+	else if (map->movement == RIGHT_PLAYER)
 		fakex = -1;
-	else if (!ft_strcmp(map->movement, "down"))
+	else if (map->movement == DOWN_PLAYER)
 		fakey = -1;
 	if (map->enemy_pos_y > 0 && map->enemy_pos_y < map->height - 1
 		&& map->enemy_pos_x > 0 && map->enemy_pos_x < map->lenght - 1
 		&& map->fullmap[map->enemy_pos_y + fakey][map->enemy_pos_x + fakex] != '1'
-		&& ft_strcmp(map->movement, "game_over"))
+		&& (map->movement != GAME_OVER))
 	{
 		map->fullmap[map->enemy_pos_y][map->enemy_pos_x] = '0';
-		mlx_put_image_to_window(map->mlx, map->win, map->wall[FOG],
+		mlx_put_image_to_window(map->mlx, map->win, map->fog,
 			(64 * (map->enemy_pos_x)), (64 * (map->enemy_pos_y)));
 		map->enemy_pos_y = map->enemy_pos_y + fakey;
 		map->enemy_pos_x = map->enemy_pos_x + fakex;

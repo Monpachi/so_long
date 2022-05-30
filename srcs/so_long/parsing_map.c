@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_map.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:12:46 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 16:37:44 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 int	check_border(char *line, char **argv, int width)
@@ -44,7 +56,25 @@ int	check_map_border(char **argv)
 	return (0);
 }
 
-int	check_characters(char **argv)
+int	all_element(char *line, t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == 'P')
+			map->nb_player++;
+		if (line[i] == 'C')
+			map->nb_collectible++;
+		if (line[i] == 'E')
+			map->nb_exit++;
+		i++;
+	}
+	return (0);
+}
+
+int	check_characters(char **argv, t_map *map)
 {
 	int		i;
 	char	*line;
@@ -55,43 +85,44 @@ int	check_characters(char **argv)
 	while (line != NULL)
 	{
 		i = 0;
-		while (line[i] != '\0')
+		while (line[++i] != '\0')
 		{
 			if (!line)
 				exit_failure("error empty\n");
 			if (line[i] != 'P' && line[i] != '1' && line[i] != '0'
-				&& line[i] != 'C' && line[i] != 'E')
+				&& line[i] != 'C' && line[i] != 'E' && line[i] != 'B')
 				exit_failure_free(line, "Your map is not parsed\n");
-			i++;
+			all_element(line, map);
 		}
 		free (line);
 		line = get_next_line(fd);
 	}
-	free (line);
+	if (map->nb_player == 0 || map->nb_collectible == 0 || map->nb_exit == 0)
+		exit_failure("Missing some elements in your game\n");
 	close (fd);
-	return (0);
+	return (free(line), 0);
 }
 
-int	parsing(int argc, char **argv)
+int	parsing(int argc, char **argv, t_map *map)
 {
 	if (!map_name_check(argc, argv))
 	{
-		printf("not a valid type of map\n");
+		ft_putstr_fd("not a valid type of map\n", 2);
 		return (1);
 	}
 	else if (check_rectangle2(argv))
 	{
-		printf("not a rectangle\n");
+		ft_putstr_fd("your map doesn't fit the condition\n", 2);
 		return (1);
 	}
-	else if (check_characters(argv))
+	else if (check_characters(argv, map))
 	{
-		printf("map parsed no good\n");
+		ft_putstr_fd("missing some elements in your map\n", 2);
 		return (1);
 	}
 	else if (check_map_border(argv))
 	{
-		printf("wide open\n");
+		ft_putstr_fd("your map is wide open\n", 2);
 		return (1);
 	}
 	return (0);

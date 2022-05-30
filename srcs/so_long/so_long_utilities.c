@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long_utilities.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:13:08 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/28 04:23:44 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 int	ft_strcmp(char *s1, char *s2)
@@ -24,17 +36,6 @@ void	ft_putstr_fd(char *s, int fd)
 {
 	if (s)
 		write (fd, s, ft_strlen(s));
-}
-
-void	print_stack(t_map *list)
-{
-	printf("----==== PRINT STACK ====----\n");
-	while (list)
-	{
-		printf("%d\n", list->number);
-		list = list->next;
-	}
-	printf("-----------------------------\n");
 }
 
 int	tothebackslash(char *s)
@@ -69,50 +70,4 @@ char	*copy_line(char *line)
 	newline[j] = '\0';
 	free (line);
 	return (newline);
-}
-
-static int	countnumber(int n)
-{
-	int	i;
-
-	i = 0;
-	if (n <= 0)
-	{
-		n = -n;
-		i++;
-	}
-	while (n)
-	{
-		n = n / 10;
-		i++;
-	}
-	return (i);
-}
-
-char	*ft_itoa(int n)
-{
-	int		i;
-	char	*str;
-	int		count;
-
-	i = 0;
-	count = countnumber(n);
-	if (n == INT_MIN)
-		return (ft_strdup("-2147483648"));
-	str = malloc(sizeof(char) * (count + 1));
-	if (!str)
-		return (NULL);
-	if (n < 0)
-	{
-		n = -n;
-		str[0] = '-';
-		i++;
-	}
-	str[count] = '\0';
-	while (--count >= i)
-	{
-		str[count] = (n % 10) + 48;
-		n /= 10;
-	}
-	return (str);
 }

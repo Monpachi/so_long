@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update_struct.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:13:25 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 18:08:35 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-# include "../../minilibx-linux/mlx.h"
+#include "../../minilibx-linux/mlx.h"
 
 int	count_nbr(t_map *map, char c)
 {
@@ -38,22 +50,13 @@ void	find_enemy_pos(t_map *map, char c)
 		{
 			if (map->fullmap[y][x] == c)
 			{
-				map->enemy_pos_x = x;
-				map->enemy_pos_y = y;
+				map->en_pos_x = x;
+				map->en_pos_y = y;
 			}
 			x++;
 		}
 		y++;
 	}
-}
-
-void	*create_xpm_file_intro(t_map *map, void *ptr, char *img)
-{
-	int	width_intro;
-	int	height_intro;
-
-	ptr = mlx_xpm_file_to_image(map->mlx, img, &width_intro, &height_intro);
-	return (ptr);
 }
 
 void	init_struct_intro(t_map *map, char **argv)
@@ -74,11 +77,10 @@ void	init_struct_intro(t_map *map, char **argv)
 
 void	init_struct(t_map *map)
 {
-	map->win_choice = 0;
+	map->win_choice = SPACE;
 	map->movement = 9999;
 	map->move_step = 0;
 	map->move_count = 0;
-	map->stop = 0;
 	map->e_move_count = 0;
 	map->collectible_nbr = count_nbr(map, 'C');
 	map->time = 0;

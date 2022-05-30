@@ -1,11 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   animation_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:05:28 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 13:10:39 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-# include "../../minilibx-linux/mlx.h"
+#include "../../minilibx-linux/mlx.h"
 
 void	player_animation(t_map *map)
 {
-	// int	width;
-	// int	height;
-
 	if (map->time > 400)
 		mlx_put_image_to_window(map->mlx, map->win, map->player1,
 			(64 * map->p_pos_x), (64 * map->p_pos_y));
@@ -52,8 +61,9 @@ int	looking_for_animation(t_map *map)
 
 void	rewrite_p(t_map *map, int fakey, int fakex)
 {
-	if (map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] != 'B')
+	if (map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] != 'B'
+		&& map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] != 'E')
 		map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] = 'P';
-	else if (map->fullmap[map->p_pos_y + fakey][map->p_pos_x + fakex] != 'E')
+	if (map->fullmap[map->p_pos_y][map->p_pos_x] != 'E')
 		map->fullmap[map->p_pos_y][map->p_pos_x] = '0';
 }

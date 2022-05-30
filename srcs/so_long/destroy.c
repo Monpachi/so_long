@@ -1,18 +1,25 @@
-#include "so_long.h"
-# include "../../minilibx-linux/mlx.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   destroy.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:06:50 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 16:57:30 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	destroy_img_intro(t_map *map)
-{
-	mlx_destroy_image(map->mlx, map->intro1);
-	mlx_destroy_image(map->mlx, map->intro);
-}
+#include "so_long.h"
+#include "../../minilibx-linux/mlx.h"
 
 void	free_intro_escape(t_map *map)
 {
 	int	y;
 
 	y = 0;
-	destroy_img_intro(map);
+	mlx_destroy_image(map->mlx, map->intro1);
+	mlx_destroy_image(map->mlx, map->intro);
 	while (map->fullmap[y])
 	{
 		free(map->fullmap[y]);
@@ -33,11 +40,6 @@ void	free_useless(t_map *map)
 	}
 }
 
-void	destroy_img(t_map *map, void *content)
-{
-	mlx_destroy_image(map->mlx, content);
-}
-
 void	free_game(t_map *map)
 {
 	int	i;
@@ -56,7 +58,8 @@ void	free_game(t_map *map)
 	mlx_destroy_image(map->mlx, map->fog1);
 	mlx_destroy_image(map->mlx, map->player);
 	mlx_destroy_image(map->mlx, map->player1);
-	mlx_destroy_image(map->mlx, map->coll);
+	if (map->collectible_nbr > 0)
+		mlx_destroy_image(map->mlx, map->coll);
 	mlx_destroy_image(map->mlx, map->exit);
 	mlx_destroy_image(map->mlx, map->exit_p);
 	mlx_destroy_image(map->mlx, map->enemy);
@@ -69,9 +72,10 @@ void	space(t_map *map)
 {
 	if (map->win_choice == 0)
 	{
-		mlx_clear_window(map->mlx, map->win);
-		destroy_img_intro(map);
 		map->win_choice = SPACE;
+		mlx_clear_window(map->mlx, map->win);
+		mlx_destroy_image(map->mlx, map->intro1);
+		mlx_destroy_image(map->mlx, map->intro);
 		game(map);
 	}
 }

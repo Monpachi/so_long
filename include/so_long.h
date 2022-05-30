@@ -81,7 +81,7 @@ typedef enum e_choice
 	GAME_OVER,
 	INTRO,
 	IN_GAME
-} t_choice;
+}	t_choice;
 
 typedef enum e_wall
 {
@@ -184,8 +184,8 @@ typedef struct s_map
 	void			*wall[31];
 	void			*bg;
 	void			*enemy;
-	int				enemy_pos_x;
-	int				enemy_pos_y;
+	int				en_pos_x;
+	int				en_pos_y;
 	void			*coll;
 	int				collectible_nbr;
 	void			*mlx;
@@ -203,6 +203,9 @@ typedef struct s_map
 	void			*game_over;
 	int				time;
 	int				fog_changer;
+	int				nb_player;
+	int				nb_exit;
+	int				nb_collectible;
 }	t_map;
 
 int		check_map_border(char **argv);
@@ -213,13 +216,12 @@ int		ft_strlen(char *s);
 void	ft_putstr_fd(char *s, int fd);
 int		check_rectangle(int argc, char **argv);
 char	*copy_line(char *line);
-//int		check_characters(int argc, char **argv);
-int		parsing(int argc, char **argv);
+int		parsing(int argc, char **argv, t_map *map);
 char	exit_failure_free(char *freethis, char *s);
 char	exit_failure_free2(char *freethis, t_map **freethistoo, char *s);
 int		map_name_check(int argc, char **argv);
 int		ft_strcmp(char *s1, char *s2);
-int		check_characters(char **argv);
+int		check_characters(char **argv, t_map *map);
 void	print_stack(t_map *list);
 int		check_rectangle2(char **argv);
 int		check_width(char **argv);
@@ -238,6 +240,8 @@ void	destroy_img(t_map *map, void *content);
 void	update_struct(t_map *map, int fakey, int fakex);
 void	init_struct_intro(t_map *map, char **argv);
 void	free_useless(t_map *map);
+void	destroy_fail_check(t_map *map);
+int		check_fail_img(t_map *map);
 /******************************************************************************/
 /*									GAME									  */
 /******************************************************************************/
@@ -249,23 +253,22 @@ void	player_up(t_map *map);
 void	space(t_map *map);
 int		escape(t_map *map);
 void	game(t_map *map);
-void 	score_in_win(t_map *map);
+void	score_in_win(t_map *map);
 void	waiting_to_mist(t_map *map);
-int	collision(t_map *map, int fakey, int fakex);
+int		collision(t_map *map, int fakey, int fakex);
 void	enemy_mvt(t_map *map);
 void	img_to_win2(char result, t_map *map, int y, int x);
+void	update_mist(t_map *map);
+int		close_win(t_map *map);
 /******************************************************************************/
 /*									LIBFT									  */
 /******************************************************************************/
 int		init_img(int width, int height, char **line, int width_max);
 t_map	*ft_lstnew(int number);
-// t_fog	*ft_lstnewvoid(void *content);
 t_map	*ft_lstlast(t_map *lst);
 void	ft_lstadd_back(t_map **alst, t_map *new);
 void	ft_lstclear(t_map **stack);
 char	*ft_itoa(int n);
-// void	ft_lstfog_back(t_fog **alst, t_fog *new);
-// t_fog	*ft_lstlastfog(t_fog *lst);
 
 void	map_insert(t_map *map);
 void	img_to_win(char **result, t_map *map);
@@ -275,15 +278,15 @@ void	wall_to_win(t_map *map, int y, int x);
 
 void	black(t_map *map);
 void	animated_fog(void *arg);
-int 	animation(t_map *map);
+int		animation(t_map *map);
 void	struct_animated_fog(t_map *map);
 void	rewrite_p(t_map *map, int fakey, int fakex);
 void	img_to_win3(char result, t_map *map, int y, int x);
 void	struct_animated_p(t_map *map);
-int	looking_for_animation(t_map *map);
+int		looking_for_animation(t_map *map);
 void	fog_insert(t_map *map);
 void	no_fog_exit(t_map *map);
 void	*create_xpm_file_intro(t_map *map, void *ptr, char *img);
-
+void	player_mvt(t_map *map);
 #endif
 

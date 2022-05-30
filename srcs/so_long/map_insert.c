@@ -1,33 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_insert.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:10:43 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 17:39:21 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-# include "../../minilibx-linux/mlx.h"
+#include "../../minilibx-linux/mlx.h"
 
 #include<string.h>
-
-// void	black(t_map *map)
-// {
-// 	map->blackmamba = mlx_new_image(map->mlx, 32, 32);
-// 	bzero(map->blackmamba, 32*32*sizeof(int));
-// }
-
 
 int	check_img(t_map *map)
 {
 	int	i;
 
 	i = 0;
-	if (map->player == NULL || map->exit == NULL || map->exit_p == NULL
-		|| map->bg == NULL || map->coll == NULL)
-	{
-		ft_putstr_fd(MISSING_IMG, 1);
-		return (EXIT_FAILURE);
-	}
+	if (check_fail_img(map))
+		exit_failure("Missing image\n");
 	while (g_wall[i])
 		i++;
 	if (i != NB_WALL)
-	{
-		ft_putstr_fd(MISSING_IMG, 1);
-		return (EXIT_FAILURE);
-	}
+		exit_failure("Missing image\n");
 	return (0);
 }
 

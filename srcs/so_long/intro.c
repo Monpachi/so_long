@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intro.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:10:32 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 16:53:25 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-# include "../../minilibx-linux/mlx.h"
+#include "../../minilibx-linux/mlx.h"
 
 void	which_penny(t_map *map)
 {
@@ -54,8 +66,15 @@ void	game(t_map *map)
 {
 	map_insert(map);
 	init_struct(map);
-	map->movement = IN_GAME;
-	printf("%d\n", map->movement);
 	map->lenght = ft_strlen(map->fullmap[0]);
 	img_to_win(map->fullmap, map);
+}
+
+void	*create_xpm_file_intro(t_map *map, void *ptr, char *img)
+{
+	int	width_intro;
+	int	height_intro;
+
+	ptr = mlx_xpm_file_to_image(map->mlx, img, &width_intro, &height_intro);
+	return (ptr);
 }

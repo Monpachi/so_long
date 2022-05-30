@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gameplay.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vchan <vchan@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/28 04:21:47 by vchan             #+#    #+#             */
+/*   Updated: 2022/05/30 12:37:50 by vchan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-# include "../../minilibx-linux/mlx.h"
+#include "../../minilibx-linux/mlx.h"
 
 void	no_fog_exit(t_map *map)
 {
@@ -26,7 +38,6 @@ void	waiting_to_mist(t_map *map)
 		if (map->myst_x3 != 0 || map->myst_y3 != 0)
 			mlx_put_image_to_window(map->mlx, map->win, map->fog,
 				(64 * (map->myst_x3)), (64 * (map->myst_y3)));
-		no_fog_exit(map);
 	}
 	else if (map->move_count == 2)
 	{
@@ -46,7 +57,7 @@ void	erase_collectible(t_map *map, int y, int x)
 	map->collectible_nbr -= i;
 	map->fullmap[y][x] = '0';
 	if (map->collectible_nbr == 0)
-		destroy_img(map, map->coll);
+		mlx_destroy_image(map->mlx, map->coll);
 }
 
 void	collectible_hunter(t_map *map)
